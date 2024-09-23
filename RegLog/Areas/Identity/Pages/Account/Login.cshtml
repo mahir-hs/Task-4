@@ -1,0 +1,98 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+<div class="container h-100 d-flex align-items-center justify-content-center">
+    <div class="col-md-4">
+        <section class="p-4 border rounded shadow bg-light">
+            <form id="account" method="post">
+                <h2 class="text-center mb-4" style="color: #333;">Log in</h2>
+                <hr class="mb-4" style="border-color: #ccc;" />
+
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Email" class="form-control" autocomplete="username" placeholder="name@example.com" required />
+                    <label asp-for="Input.Email" class="form-label">Email</label>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" placeholder="password" required />
+                    <label asp-for="Input.Password" class="form-label">Password</label>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input class="form-check-input" asp-for="Input.RememberMe" />
+                    <label asp-for="Input.RememberMe" class="form-check-label">Remember me</label>
+                </div>
+
+                <div>
+                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+                </div>
+
+                <div class="text-center mt-3">
+                    <p class="text-muted">
+                        <a id="forgot-password" asp-page="./ForgotPassword" class="link-custom">Forgot your password?</a>
+                    </p>
+                    <p class="text-muted">
+                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="link-custom">Create an account</a>
+                    </p>
+                    <p class="text-muted">
+                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation" class="link-custom">Resend email confirmation</a>
+                    </p>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f4;
+        height: 100vh; /* Ensure full viewport height */
+        margin: 0;
+    }
+
+    h1 {
+        color: #333;
+    }
+
+    section {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+    .link-custom {
+        color: #007bff;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+        .link-custom:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
+    .text-muted {
+        color: #6c757d !important;
+    }
+</style>

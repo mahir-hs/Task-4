@@ -1,0 +1,148 @@
+﻿@model IEnumerable<RegLog.Model.ApplicationUser>
+
+@{
+    ViewData["Title"] = "User Management";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<!-- Add professional fonts -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<form id="user-management-form" method="post" asp-controller="Users" asp-action="ManageUsers">
+    <div class="mb-3">
+        <button id="block-users" name="actionType" value="block" type="submit" class="btn btn-warning custom-button">
+            <i class="bi bi-lock-fill"></i> Block
+        </button>
+        <button id="unblock-users" name="actionType" value="unblock" type="submit" class="btn btn-success custom-button">
+            <i class="bi bi-unlock-fill"></i> 
+        </button>
+        <button id="delete-users" name="actionType" value="delete" type="submit" class="btn btn-danger custom-button">
+            <i class="bi bi-trash-fill"></i> 
+        </button>
+    </div>
+
+    <table class="table table-bordered table-striped user-table">
+        <thead>
+            <tr>
+                <th style="text-align: left;"><input type="checkbox" id="select-all" /></th>
+                <th style="text-align: left;">Name</th>
+                <th style="text-align: left;">e-Mail</th>
+                <th style="text-align: right;">Last login</th>
+                <th style="text-align: left;">Registration</th>
+                <th style="text-align: left;">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                foreach (var user in Model)
+                {
+                    var rowClass = user.Status == RegLog.Model.UserStatus.Blocked ? "blocked-user-row" : "";
+                    <tr class="@rowClass">
+                        <td><input type="checkbox" name="selectedUsers" value="@user.Id" /></td>
+                        <td>@user.Name</td>
+                        <td>@user.Email</td>
+                        <td style="text-align: right;">@user.LastLoginDate?.ToString("HH:mm:ss, dd MMM, yyyy")</td>
+                        <td>@user.RegistrationDate.ToString("HH:mm:ss, dd MMM, yyyy")</td>
+                        <td>@user.Status</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr><td colspan="5">No users found.</td></tr>
+            }
+        </tbody>
+    </table>
+</form>
+
+<!-- Minimalistic and Professional CSS -->
+<style>
+    /* Apply Roboto font */
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f9f9f9;
+       
+        padding: 20px;
+        width: auto;
+    }
+
+    h2 {
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .custom-button {
+        font-weight: 500;
+        background-color: white;
+        border: 2px solid black;
+        color: black;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+        .custom-button:hover {
+            background-color: #f0f0f0;
+        }
+
+    .btn-danger.custom-button {
+        background-color: red;
+        color: white;
+        border: 2px solid darkred;
+    }
+
+        .btn-danger.custom-button:hover {
+            background-color: darkred;
+        }
+
+    table {
+        width: auto;
+        margin-top: 20px;
+        background-color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-collapse: collapse; /* Ensures borders are combined between cells */
+        border-top: 2px solid black;
+    }
+
+    th, td {
+        padding: 10px;
+        border: 2px solid black; /* Explicit border for each cell */
+    }
+
+    th {
+        background-color: #f0f0f0;
+        color: #5f5f5f;
+        font-weight: 700;
+    }
+
+    td {
+        color: #333;
+    }
+
+    .user-table tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    /* Blocked user row styling */
+    .blocked-user-row td:not(:last-child) {
+        opacity: 0.5;
+    }
+
+    .blocked-user-row td:last-child {
+        opacity: 1;
+    }
+
+    /* Narrow rows */
+    td, th {
+        font-size: 14px;
+    }
+
+    
+
+</style>
+
+<script src="~/js/users.js" asp-append-version="true"></script>
