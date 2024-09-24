@@ -94,7 +94,7 @@ namespace RegLog.Areas.Identity.Pages.Account
                 ModelState.AddModelError(string.Empty, ErrorMessage);
             }
 
-            returnUrl ??= Url.Content("~/Users");
+            returnUrl ??= Url.Content("~/Users/Index");
 
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
@@ -106,7 +106,7 @@ namespace RegLog.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/Users");
+            returnUrl ??= Url.Content("~/Users/Index");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
@@ -115,11 +115,15 @@ namespace RegLog.Areas.Identity.Pages.Account
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var user = await _userManager.FindByEmailAsync(Input.Email);
-                
-                if(user.Status == RegLog.Model.UserStatus.Blocked)
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "User not found.");
+                    return Page(); // Redisplay form if user not found.
+                }
+                if (user.Status == RegLog.Model.UserStatus.Blocked)
                 {
                     ModelState.AddModelError(string.Empty, "Account is Blocked.");
-                    return Page();
+                    return RedirectToPage("/Identity/Account/Login");
                 }
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)

@@ -14,10 +14,12 @@ namespace RegLog.Controllers
     public class UsersController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public UsersController(UserManager<ApplicationUser> userManager)
+        public UsersController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         // GET: Index Page
@@ -70,7 +72,7 @@ namespace RegLog.Controllers
             if (isCurrentUser)
             {
                 // Log out the current user and redirect to the login page
-                await HttpContext.SignOutAsync();
+                await _signInManager.SignOutAsync();
                 return Redirect("/Identity/Account/Login");
 
             }
